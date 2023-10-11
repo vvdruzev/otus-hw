@@ -29,29 +29,27 @@ func Unpack(str string) (string, error) {
 	end = len(str2)
 
 	for i := 0; i < end-1; i++ {
-		c = c + str2[i]
+		c += str2[i]
 		if i <= end-2 {
-
 			if _, err = strconv.Atoi(str2[i] + str2[i+1]); err == nil {
 				return "", fmt.Errorf("некорректная строка")
 			}
 		}
 		number, err := strconv.Atoi(str2[i+1])
 		if err != nil {
-			result = result + c
+			result += c
 			c = ""
 			if i == end-2 {
-				result = result + str2[i+1]
+				result += str2[i+1]
 			}
 			continue
 		}
-		result = result + strings.Repeat(c, number)
+		result += strings.Repeat(c, number)
 		c = ""
 		i++
 		if i == end-2 {
-			result = result + str2[i+1]
+			result += str2[i+1]
 		}
-
 	}
 	return result, nil
 }
