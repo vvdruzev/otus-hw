@@ -2,7 +2,6 @@ package hw02unpackstring
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -16,7 +15,7 @@ func Unpack(str string) (string, error) {
 	}
 	_, err := strconv.Atoi(str[0:1])
 	if err == nil {
-		return "", fmt.Errorf("некорректная строка")
+		return "", ErrInvalidString
 	}
 	if end == 1 {
 		return str, nil
@@ -31,8 +30,8 @@ func Unpack(str string) (string, error) {
 	for i := 0; i < end-1; i++ {
 		c += str2[i]
 		if i <= end-2 {
-			if _, err = strconv.Atoi(str2[i] + str2[i+1]); err == nil {
-				return "", fmt.Errorf("некорректная строка")
+			if _, err = strconv.Atoi(str2[i+1] + str2[i+2]); err == nil {
+				return "", ErrInvalidString
 			}
 		}
 		number, err := strconv.Atoi(str2[i+1])
