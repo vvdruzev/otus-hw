@@ -29,7 +29,7 @@ func Unpack(str string) (string, error) {
 
 	for i := 0; i < end-1; i++ {
 		c += str2[i]
-		if i <= end-2 {
+		if i < end-2 {
 			if _, err = strconv.Atoi(str2[i+1] + str2[i+2]); err == nil {
 				return "", ErrInvalidString
 			}
