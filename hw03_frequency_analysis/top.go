@@ -14,6 +14,40 @@ func Top10(str string) []string {
 	r := regexp.MustCompile(`\s+`)
 	str2 := r.ReplaceAllString(str, " ")
 
+	pairs := rankByWordCountSlice(str2)
+
+	keys := []string{}
+	for _, pair := range pairs[:10] {
+		keys = append(keys, pair.Key)
+	}
+	return keys
+}
+
+func Top10SortMap(str string) []string {
+	if str == "" {
+		return []string{}
+	}
+
+	r := regexp.MustCompile(`\s+`)
+	str2 := r.ReplaceAllString(str, " ")
+
+	pairs := rankByWordCount(str2)
+
+	keys := []string{}
+	for _, pair := range pairs[:10] {
+		keys = append(keys, pair.Key)
+	}
+	return keys
+}
+
+func Top10Asterisk(str string) []string {
+	if str == "" {
+		return []string{}
+	}
+
+	r := regexp.MustCompile(`\s+`)
+	str2 := r.ReplaceAllString(str, " ")
+
 	// pairs := rankByWordCount(str2)
 	// pairs := rankByWordCountSlice(str2)
 	pairs := rankByWordCountSliceAsterisk(str2)
