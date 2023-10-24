@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 var ErrInvalidString = errors.New("invalid string")
@@ -17,14 +16,15 @@ func Unpack(str string) (string, error) {
 	}
 	remember := runes[0]
 
-	if unicode.IsDigit(remember) {
+	_, err := strconv.Atoi(string(remember))
+	if err == nil {
 		return result, ErrInvalidString
 	}
 
 	for i := 1; i < len(runes); i++ {
 		current := runes[i]
-		if unicode.IsDigit(current) {
-			if unicode.IsDigit(remember) {
+		if _, err = strconv.Atoi(string(current)); err == nil {
+			if _, err = strconv.Atoi(string(remember)); err == nil {
 				return "", ErrInvalidString
 			}
 			number, _ := strconv.Atoi(string(current))
@@ -32,13 +32,13 @@ func Unpack(str string) (string, error) {
 			remember = current
 			continue
 		}
-		if !unicode.IsDigit(remember) {
+		if _, err = strconv.Atoi(string(remember)); err != nil {
 			result += string(remember)
 		}
 
 		remember = current
 	}
-	if !unicode.IsDigit(remember) {
+	if _, err = strconv.Atoi(string(remember)); err != nil {
 		result += string(remember)
 	}
 	return result, nil
