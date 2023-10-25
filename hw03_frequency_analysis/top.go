@@ -14,7 +14,7 @@ func Top10(str string) []string {
 	r := regexp.MustCompile(`\s+`)
 	str2 := r.ReplaceAllString(str, " ")
 
-	pairs := rankByWordCountSlice(str2)
+	pairs := rankByWordCountSliceAsterisk(str2)
 
 	keys := []string{}
 	for _, pair := range pairs[:10] {
@@ -28,12 +28,15 @@ type Pair struct {
 	Value int
 }
 
-func rankByWordCountSlice(str string) []Pair {
+func rankByWordCountSliceAsterisk(str string) []Pair {
+	r := regexp.MustCompile(`[А-Яа-я]+(\-?[А-Яа-я]+)*`)
+	words := r.FindAllString(str, -1)
+
 	wordsKey := make(map[string]int)
-	words := strings.Split(str, " ")
 	for _, word := range words {
-		wordsKey[word]++
+		wordsKey[strings.ToLower(word)]++
 	}
+	delete(wordsKey, "-")
 
 	ss := []Pair{}
 	for k, v := range wordsKey {
