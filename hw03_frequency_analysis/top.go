@@ -29,7 +29,7 @@ type Pair struct {
 }
 
 func rankByWordCountSliceAsterisk(str string) []Pair {
-	r := regexp.MustCompile(`[А-Яа-я]+(\-?[А-Яа-я]+)*`)
+	r := regexp.MustCompile(`[\p{L}\d_]+(\-?[\p{L}\d_]+)*`)
 	words := r.FindAllString(str, -1)
 
 	wordsKey := make(map[string]int)
