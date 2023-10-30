@@ -50,12 +50,41 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		// Move To Front one element
+		l := NewList()
+
+		l.PushFront(10)         // [10]
+		l.MoveToFront(l.Back()) // [10]
+		require.Equal(t, 1, l.Len())
+
+		// выталкивание элементов из-за размера очереди
+		c := NewCache(3)
+
+		c.Set("aaa", 100) // лишний
+		c.Set("bbb", 200)
+		c.Set("ccc", 300)
+		c.Set("ddd", 400)
+
+		val, ok := c.Get("aaa")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+		// выталкивания давно используемых элементов
+		c.Get("bbb")
+		c.Get("ccc")
+		c.Set("ddd", 500) // самый старый
+		c.Set("ccc", 600)
+		c.Get("bbb")
+		c.Set("fff", 700)
+		c.Get("ddd")
+		require.False(t, ok)
+		require.Nil(t, val)
+
 	})
 }
 
-func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
+func TestCacheMultithreading(_ *testing.T) {
+	// t.Skip() // Remove me if task with asterisk completed.
 
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}
