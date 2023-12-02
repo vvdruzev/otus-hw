@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"github.com/cheggaaa/pb/v3"
 	"io"
 	"os"
 )
@@ -44,12 +45,19 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	fileFrom.Seek(offset, io.SeekStart)
 
 	if limit == 0 {
+		count := int(fi.Size())
+		bar := pb.StartNew(count)
 		b, _ := io.ReadAll(fileFrom)
 		fileTo.Write(b)
+		bar.Add(count)
+		bar.Finish()
 	} else {
-		b := make([]byte, limit)
-		fileFrom.Read(b)
-		fileTo.Write(b)
+		count := int(limit)
+		bar := pb.StartNew(count)
+		io.CopyN(fileTo, fileFrom, limit)
+		bar.Add(count)
+		bar.Finish()
 	}
+
 	return nil
 }
