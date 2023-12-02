@@ -39,7 +39,7 @@ func Run(tasks []Task, n, m int) error {
 	wg.Add(n)
 
 	for i := 0; i < n; i++ {
-		go func(i int) {
+		go func() {
 			defer wg.Done()
 			for task := range counter.tasksChannel {
 				err := task()
@@ -47,7 +47,7 @@ func Run(tasks []Task, n, m int) error {
 					counter.little()
 				}
 			}
-		}(i)
+		}()
 	}
 	wg.Wait()
 
