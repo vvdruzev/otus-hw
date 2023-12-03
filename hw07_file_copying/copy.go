@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -31,7 +32,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		limit = 0
 	}
 	if offset > fi.Size() {
-		return err
+		return fmt.Errorf("смещение за границами файла")
 	}
 	if _, err := os.Stat(toPath); err == nil {
 		// path/to/whatever exists
