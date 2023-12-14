@@ -1,6 +1,9 @@
 package hw06pipelineexecution
 
-import "log"
+import (
+	"log"
+	"sync"
+)
 
 type (
 	In  = <-chan interface{}
@@ -12,34 +15,28 @@ type Stage func(in In) (out Out)
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	// Place your code here.
-	inn := make(chan interface{})
-	st := stages[0](inn)
-
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
-		for _, stage := range stages[1:] {
-			st = stage(st)
+		defer wg.Done()
+		for _, stage := range stages {
+			in = stage(in)
+		}
+		for {
+			select {
+			case <-done:
+				//close(inn)
+				log.Println("keeping = false")
+				return
+			case _, ok := <-in:
+				if !ok {
+					return
+				}
+				//log.Printf("sdf %v\n", v)
+				//inn <- v
+			}
 		}
 	}()
-	keeping := true
-	for keeping {
-		select {
-		case <-done:
-			close(inn)
-			keeping = false
-			log.Println("keeping = false")
-			break
-		case v, ok := <-in:
-			if !ok {
-				close(inn)
-				keeping = false
-				log.Println("keeping = false")
-
-				break
-			}
-			log.Printf("sdf %v\n", v)
-			inn <- v
-		}
-	}
-
-	return st
+	wg.Wait()
+	return in
 }
