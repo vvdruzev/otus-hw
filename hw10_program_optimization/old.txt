@@ -1,0 +1,9 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/vvdruzev/otus-hw/hw10_program_optimization
+BenchmarkGetUsers
+BenchmarkGetUsers-8       	    3270	    311200 ns/op	   54941 B/op	     311 allocs/op
+BenchmarkCountDomains
+BenchmarkCountDomains-8   	       8	 130884312 ns/op	161921497 B/op	 1969504 allocs/op
+PASS
+ok  	github.com/vvdruzev/otus-hw/hw10_program_optimization	8.111s
